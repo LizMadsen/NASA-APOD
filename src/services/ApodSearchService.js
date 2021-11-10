@@ -1,3 +1,5 @@
+const { AppState } = require("../AppState")
+const { Apod } = require("../models/apod")
 const { logger } = require("../utils/Logger")
 
 
@@ -7,5 +9,9 @@ class ApodSearchService {
     async findApodByQuery(query) {
         const res = await apodDB.get(`query=${query}&${apiKey}`)
         logger.log(res.data)
+        const apod = res.data.results.map(a => new Apod(a))
+        AppState.results = apod
     }
 }
+
+export const ApodSearchService = new ApodSearchService()
